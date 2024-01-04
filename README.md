@@ -10,13 +10,7 @@ Requirements
 - keras                         2.6.0
 - tensorflow                    2.6.0+nv
 
-Authors:
-Manuel Schneider[^1], Norbert Greifzu[^1][^2], Lei Wang[^3], Christian Walther[^4], Andreas Wenzel[^1][^2], Pu Li[^5]
-[^1]: Schmalkalden University of applied science, Faculty Electrical Engineering, Embedded Diagnostics Systems, Blechhammer 6,Schmalkalden, 98574, Thuringia, Germany.
-[^2]: Fraunhofer IOSB, IOSB-AST Ilmenau, Fraunhofer Institute of Optronics, System Technologies and Image Exploitation, Am Vogelherd 90, Ilmenau, 98693, Germany.
-[^3]: Fraunhofer IISB, Fraunhofer Institute for Integrated Systems and Device Technology IISB, Department Intelligent Energy Systems, Schottkystraße 10, Erlangen, 91058, Bavaria, Germany.
-[^4]: Bauhaus-Universit ̈at Weimar, Institute for Structural Mechanics, Marienstraße 15, Weimar, 99423, Thuringia, Germany.
-[^5]: Technical University of Ilmenau, Department of Computer Science and Automation, Ehrenbergstraße 29, Ilmenau, 98684, Thuringia, Germany.
-
 References
 Journal [Link](https://example.com/ "Optionaler Linktitel").
+
+![CNN result with CAM representation](https://example.com/bild.jpg)
