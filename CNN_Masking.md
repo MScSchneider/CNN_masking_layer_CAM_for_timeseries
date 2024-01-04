@@ -1,5 +1,7 @@
 # Code snippets for CNN with masking layer
 
+import packages for python
+```
 import numpy as np
 import pandas as pd
 import datetime
@@ -18,7 +20,9 @@ from tensorflow.python.framework.ops import disable_eager_execution
 
 from matplotlib.font_manager import FontProperties
 import csv
-
+```
+Test GPU use for tensorflow
+```
 physical_devices = tf.config.list_physical_devices('GPU')
 print(physical_devices)
 i = 0
@@ -34,14 +38,20 @@ logical_devices = tf.config.list_logical_devices('GPU')
 for dev in logical_devices:
     print('   Found GPU: ', dev.name)
 print('success')
-
+```
+ternsorflow version
+```
 tf.__version__
 #2.6.0
-
+```
+some basic variables
+```
 outPath = Path.cwd() / 'cnn_masking'
 maskVal = -1000000
 nb_classes = 2
-
+```
+build model function
+```
 def build_model(X_train1, maskVal_, nb_classes_, CNN_path, model_png_exp):
     print("----------Generiere CNN Model-------")
     #print( X_train.reshape(-1).shape )
@@ -63,11 +73,15 @@ def build_model(X_train1, maskVal_, nb_classes_, CNN_path, model_png_exp):
         tf.keras.utils.plot_model(model_, to_file=CNN_path + os.sep + 'Modelstruktur_CNN.png', dpi=400, show_shapes = True, show_layer_names = True)
     model_.save(CNN_path + os.sep + str(model_.name))
     return model_
-
+```
+use model function
+```
 model_def = build_model(X_train_unbal, maskVal, nb_classes, str(outPath), True)
 Modelname = model_def.name
 Modelname
-
+```
+model copy for generation of identically sub models e.g. for balanced, unbalanced, scaled and unscaled dataset configurations
+```
 def model_copy_func(Modelname_, outPath_):
     model_bal_ = keras.models.load_model( str(outPath_) + os.sep + Modelname_ )
     model_bal_._name = Modelname_ + "_bal"
@@ -89,7 +103,9 @@ def model_copy_func(Modelname_, outPath_):
     Modelname_unbal_S = model_unbal_S_.name
     print("modelname: ",Modelname_unbal_S)
     return model_bal_, model_bal_S_, model_unbal_, model_unbal_S_
-
+```
+generate directories for all sub models
+```
 def dir_generator(CNN_path,mo_name,mo_name1,mo_name2,mo_name3,mo_name4):
     dir_models = CNN_path + os.sep + mo_name + os.sep + 'models'
     dir_figures = CNN_path + os.sep + mo_name + os.sep + 'CNN_figures'
@@ -129,9 +145,13 @@ def dir_generator(CNN_path,mo_name,mo_name1,mo_name2,mo_name3,mo_name4):
     print("dir: " + dir_best4 + " created!")
     print("dir: " + dir_Log4 + " created!")
     return dir_models,dir_figures,dir_CAM_figures,dir_best1,dir_Log1,dir_best2,dir_Log2,dir_best3,dir_Log3,dir_best4,dir_Log4
-
+```
+use dir_generator(CNN_path,mo_name,mo_name1,mo_name2,mo_name3,mo_name4) function
+```
 dir,dir_figures,dir_CAM_figures,dir_best_bal,dir_Log_bal,dir_best_bal_S,dir_Log_bal_S,dir_best_unbal,dir_Log_unbal,dir_best_unbal_S,dir_Log_unbal_S = dir_generator(str(outPath),Modelname,model_bal._name,model_bal_S._name,model_unbal._name,model_unbal_S._name)
-
+```
+function for the cnn model training
+```
 def CNN_fit_func(model_, X_train_, Y_train_, dir_, dir_best_, dir_Log_, Modelname_):
     class TimeHistory(tf.keras.callbacks.Callback):
         def on_train_begin(self, logs={}):
@@ -193,23 +213,31 @@ def CNN_fit_func(model_, X_train_, Y_train_, dir_, dir_best_, dir_Log_, Modelnam
             writer.writerow(timelist)
             
     return hist,model_
-
+```
+training a cnn model
+```
 hist_bal, model_bal = CNN_fit_func(model_bal, X_train_bal, Y_train_bal, dir, dir_best_bal, dir_Log_bal, model_bal.name)
-
+```
+function for get some layer outputs
+```
 def partial_func(model_):
     partial_model_ = tf.keras.Model(model_.inputs, [model_.layers[-4].output,
                                                       model_.layers[-3].output,
                                                       model_.layers[-2].output,
                                                       model_.layers[-1].output])
     return partial_model_
-
+```
+get the output of the last layers for a given dataset e.g.  X_train_bal[0:1,:,:]
+```
 val_cam_output = partial_model( X_train_bal[0:1,:,:], training=False) #x_val_inputs
 print( np.array(val_cam_output[0]) )
 print( val_cam_output )
 
 [cnn2, relu2, gap, dense] = val_cam_output
 dense.shape, gap.shape, relu2.shape, relu2.shape
+```
 
+```
 def relu_plot(relu2_, name, best_model, dir_figures_,best_model_):
     plt.close(7)
     plt.figure(7, figsize=(6, 7), dpi= 100, facecolor='w', edgecolor='k')
@@ -225,27 +253,35 @@ def relu_plot(relu2_, name, best_model, dir_figures_,best_model_):
 
     if not plt.rcParams["text.usetex"]:
         plt.savefig(str(dir_figures_) +os.sep+ str(fname) + ".svg", dpi=150)
+```
 
+```
 def get_wb(model_):
     class_weights_ = model_.layers[-1].get_weights()[0]
     class_bias_ = model_.layers[-1].get_weights()[1]
     print("class_weights_.shape, class_bias_.shape: ", class_weights_.shape, class_bias_.shape)
     return class_weights_,class_bias_
+```
 
+```
 def get_sep(model_, relu2_):
     class_weights,class_bias = get_wb(model_)
     act_good_sep_ = relu2_ * class_weights[:,0] + class_bias[0]
     act_bad_sep_ = relu2_ * class_weights[:,1] + class_bias[1]
     print("act_good_sep_.shape, act_bad_sep_.shape: ", act_good_sep_.shape, act_bad_sep_.shape )
     return act_good_sep_,act_bad_sep_
+```
 
+```
 def get_sep_sum(model_, relu2_):
     act_good_sep_, act_bad_sep_ = get_sep(model_, relu2_)
     act_good_series_ = np.sum(act_good_sep_, axis=-1)
     act_bad_series_ = np.sum(act_bad_sep_, axis=-1)
     print("act_good_series_.shape, act_bad_series_.shape: ", act_good_series_.shape, act_bad_series_.shape )
     return act_good_series_,act_bad_series_
+```
 
+```
 def get_CAM(model_, val_cam_output_):
     last_conv = val_cam_output_
     gap_weight = model_.layers[-1].get_weights()
@@ -253,8 +289,10 @@ def get_CAM(model_, val_cam_output_):
     print(gap_weight[0].shape)
     CAM_ = np.dot(last_conv[0], gap_weight[0])
     return CAM_
+```
 
-def CAM_plot3(model_, X_test_, Y_test_bi_, Y_test_keys_, val_cam_output_, best_model, cam_signal, dir_figures_):
+```
+def CAM_plot(model_, X_test_, Y_test_bi_, Y_test_keys_, val_cam_output_, best_model, cam_signal, dir_figures_):
     plt.rc('text', usetex=False)
     plt.rc('font', family='serif')
     
@@ -340,6 +378,9 @@ def CAM_plot3(model_, X_test_, Y_test_bi_, Y_test_keys_, val_cam_output_, best_m
             else:
                 plt.savefig(str(dir_figures_) +os.sep+ str(fname) +".pdf", dpi='figure', format='pdf')
     return CAM
+```
 
+```
 cam_signal = 21 # test timeseries from input dataset
-CAM = CAM_plot3(model, X_test, Y_test_bi, Y_test_keys, val_cam_output, best_model, cam_signal, dir_CAM_figures)
+CAM = CAM_plot(model, X_test, Y_test_bi, Y_test_keys, val_cam_output, best_model, cam_signal, dir_CAM_figures)
+```
