@@ -11,7 +11,6 @@ It shows some code snippets for python, to use cnn with masking layer for timese
 - keras                         2.6.0
 - tensorflow                    2.6.0+nv
 
-# References
 Journal [Link](https://example.com/ "Optionaler Linktitel").
 
 ![CNN result with CAM representation](https://example.com/bild.jpg)
