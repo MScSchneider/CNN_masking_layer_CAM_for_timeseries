@@ -50,6 +50,92 @@ outPath = Path.cwd() / 'cnn_masking'
 maskVal = -1000000
 nb_classes = 2
 ```
+function for scaling the input data
+```
+def scalling(X_train_,X_test_):
+    X_train_2d = X_train_.copy()
+    X_test_2d = X_test_.copy()
+    
+    #a_train,b_train = X_train.shape
+    X_train_sc = X_train_2d
+    
+    print("X_train_sc.shape: ",X_train_sc.shape)
+    
+    a_train = 0
+    for line_train in X_train_2d:
+        #all_max = np.nanmax(X_all_2d)
+        train_max = np.nanmax(X_train_2d)
+        line_train = line_train  / train_max
+        X_train_sc[a_train] = line_train
+        a_train = a_train + 1
+    
+    #a_test,b_test = X_train.shape
+    X_test_sc = X_test_2d
+    
+    print("X_test_sc.shape: ",X_test_sc.shape)
+    
+    a_test = 0
+    for line_test in X_test_2d:
+        test_max = np.nanmax(X_test_2d)        
+        line_test = line_test  / test_max
+        X_test_sc[a_test] = line_test
+        a_test = a_test + 1
+
+    stop = time.perf_counter()
+    print('time used for Performing train/validation/test split = {}s'.format(stop-start))
+    print('-----------------------')
+    #X_train_sc = np.expand_dims(X_train_sc, axis=0)
+    #X_test_sc = np.expand_dims(X_test_sc, axis=0)    
+    print("X_train_sc.shape: ",X_train_sc.shape)
+    print("X_test_sc.shape: ",X_test_sc.shape)
+    
+    return X_train_sc,X_test_sc
+```
+use function for scaling the input data and insert the masking value to shorter time series where NAN values at the end of the vector
+```
+scalling_flag = True
+if scalling_flag == True:
+    X_train_unbal_S,X_test_S = scalling(X_train_unbal,X_test)
+    X_train_bal_S,X_test_S = scalling(X_train_bal,X_test)
+
+
+    
+masking = True
+#print(X_test)
+if masking == True:
+    maskVal = -1000000
+
+    X_train_unbal = X_train_unbal.astype('float32')
+    X_train_unbal[ np.isnan(X_train_unbal) ] = maskVal
+    
+    X_train_unbal_S = X_train_unbal_S.astype('float32')
+    X_train_unbal_S[ np.isnan(X_train_unbal_S) ] = maskVal
+    
+    X_train_bal = X_train_bal.astype('float32')
+    X_train_bal[ np.isnan(X_train_bal) ] = maskVal
+    
+    X_train_bal_S = X_train_bal_S.astype('float32')
+    X_train_bal_S[ np.isnan(X_train_bal_S) ] = maskVal
+
+    X_test = X_test.astype('float32')
+    X_test[ np.isnan(X_test) ] = maskVal
+    
+    X_test_S = X_test_S.astype('float32')
+    X_test_S[ np.isnan(X_test_S) ] = maskVal
+
+pre_masking = True
+#print(X_test)
+if pre_masking == True:
+    maskVal = -1000000        
+    maskierebis = 100
+    X_train_unbal[:,:maskierebis,:] = maskVal
+    X_train_unbal_S[:,:maskierebis,:] = maskVal
+    X_train_bal[:,:maskierebis,:] = maskVal
+    X_train_bal_S[:,:maskierebis,:] = maskVal
+    X_test[:,:maskierebis,:] = maskVal
+    X_test_S[:,:maskierebis,:] = maskVal
+X_test,X_test_S
+```
 build model function
 ```
 def build_model(X_train1, maskVal_, nb_classes_, CNN_path, model_png_exp):
