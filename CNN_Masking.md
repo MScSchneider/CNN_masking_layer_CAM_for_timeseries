@@ -304,6 +304,7 @@ training a cnn model
 ```
 hist_bal, model_bal = CNN_fit_func(model_bal, X_train_bal, Y_train_bal, dir, dir_best_bal, dir_Log_bal, model_bal.name)
 ```
+# Code snippets for CAM Visualization
 function for get some layer outputs
 ```
 def partial_func(model_):
