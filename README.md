@@ -18,10 +18,15 @@ Journal [Link](https://example.com/ "Optionaler Linktitel").
 # Citation
 If you find CNN code snippets useful to your research, please cite our work:
 ```
-@misc{Schneider2024,
-      title={An end-to-end machine learning approach with explanation for time series with varying lengths}, 
-      author={},
-      year={2024},
-      ...
+@Article{Schneider2024,
+  author    = {Schneider, Manuel and Greifzu, Norbert and Wang, Lei and Walther, Christian and Wenzel, Andreas and Li, Pu},
+  journal   = {Neural Computing and Applications},
+  title     = {An end-to-end machine learning approach with explanation for time series with varying lengths},
+  year      = {2024},
+  issn      = {1433-3058},
+  month     = feb,
+  doi       = {10.1007/s00521-024-09473-9},
+  publisher = {Springer Science and Business Media LLC},
 }
+
 ```
