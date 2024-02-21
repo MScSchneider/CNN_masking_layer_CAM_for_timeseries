@@ -11,8 +11,8 @@ It shows some code snippets for python, to use cnn with masking layer for timese
 - keras                         2.6.0
 - tensorflow                    2.6.0+nv
 
-Journal [Link](https://www.researchgate.net/publication/378312237_An_end-to-end_machine_learning_approach_with_explanation_for_time_series_with_varying_lengths)
-
+Journal 
+[ResearchGate](https://www.researchgate.net/publication/378312237_An_end-to-end_machine_learning_approach_with_explanation_for_time_series_with_varying_lengths)
 [Neural Computing and Applications](https://link.springer.com/article/10.1007/s00521-024-09473-9?utm_source=rct_congratemailt&utm_medium=email&utm_campaign=oa_20240219&utm_content=10.1007/s00521-024-09473-9)
 
 # Citation
